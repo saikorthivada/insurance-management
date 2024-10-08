@@ -1,6 +1,5 @@
 package com.insuranceManagement.demo.service;
 
-import com.insuranceManagement.demo.service.*;
 import com.insuranceManagement.demo.model.User;
 import com.insuranceManagement.demo.repository.UserRepository;
 
@@ -76,6 +75,14 @@ public class UserService {
         } else {
             throw new UserAlreadyExistsException("User not found with id: " + id);
         }
+    }
+    
+    public Optional<User> login(String email, String password) {
+    	Optional<User> user = userRepository.findByEmailAndPassword(email, password);
+    	if (user != null) {
+            return user;
+    	}
+    	throw new UserAlreadyExistsException("User does not exist: " + email);
     }
 }
 

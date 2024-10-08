@@ -1,4 +1,5 @@
 package com.insuranceManagement.demo.controller;
+import com.insuranceManagement.demo.model.ILoginRequest;
 import com.insuranceManagement.demo.model.User;
 import com.insuranceManagement.demo.service.UserService;
 
@@ -6,6 +7,7 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class RegistrationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUsers(@PathVariable UUID id) {
     	 try {
-             User userDetails = userService.getUserById(id);
+             User userDetails = userService.deleteByUserID(id);
              return ResponseEntity.ok(userDetails);
          } catch (MessagingException e) {
              return ResponseEntity.status(500).body("Failed to send email");
@@ -64,4 +66,10 @@ public class RegistrationController {
     	 User userDetails = userService.updateUser(id, user);
 		 return ResponseEntity.ok(userDetails);
     }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody ILoginRequest loginDetails) {
+   	 	Optional<User> userDetails = userService.login(loginDetails.getEmail(), loginDetails.getPassword());
+		 return ResponseEntity.ok(userDetails);
+   }
 }
