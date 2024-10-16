@@ -146,5 +146,15 @@ public class PolicyService {
         	}
         	throw new UserAlreadyExistsException("User already exist: " + agentId);
 	    }
+	    
+	    public List<PolicyDetails> getAllPolicies(String agentId) throws MessagingException {
+	    	User user = userService.getUserById(UUID.fromString(agentId));
+	    	if (user != null) {
+	    		List<PolicyDetails> policyDetails = policyRepository.findAll();
+	    		return policyDetails;
+	    	}
+	    	throw new UserAlreadyExistsException("Customer does not exist: " + agentId);
+	    	
+	    }
 }
 	    

@@ -1,7 +1,6 @@
 package com.insuranceManagement.demo.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +23,14 @@ import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/policy/{agentId}/{cutomerId}")
+@RequestMapping("/api/policy/{agentId}")
 public class PolicyController {
 
 	
 	@Autowired
     private PolicyService policyService;
 
-    @PostMapping
+    @PostMapping("/{cutomerId}")
     public ResponseEntity<?> registerPolicy(@PathVariable String agentId, @PathVariable String cutomerId,@Valid @RequestBody PolicyDetails policyDetails) {
     	try {
 
@@ -43,7 +42,7 @@ public class PolicyController {
         }
     }
     
-    @GetMapping
+    @GetMapping("/{cutomerId}")
     public ResponseEntity<?> getPoliciesByCustomerID(@PathVariable String agentId, @PathVariable String cutomerId) {
     	try {
 
@@ -54,7 +53,7 @@ public class PolicyController {
         }
     }
     
-    @GetMapping("/{policyId}")
+    @GetMapping("/{cutomerId}/{policyId}")
     public ResponseEntity<?> getPoliciesByPolicyId(@PathVariable String agentId, @PathVariable String cutomerId, @PathVariable String policyId) {
     	try {
 
@@ -65,7 +64,7 @@ public class PolicyController {
         }
     }
     
-    @DeleteMapping("/{policyId}")
+    @DeleteMapping("/{cutomerId}/{policyId}")
     public ResponseEntity<?> deletePolicyByPolicyID(@PathVariable String agentId, @PathVariable String cutomerId, @PathVariable String policyId) {
     	try {
 
@@ -76,12 +75,24 @@ public class PolicyController {
         }
     }
     
-    @PutMapping("/{policyId}")
+    @PutMapping("/{cutomerId}/{policyId}")
     public ResponseEntity<?> updatePolicyDetails(@PathVariable String agentId, @PathVariable String cutomerId, @PathVariable String policyId, @Valid @RequestBody PolicyDetails policyDetails) {
     	try {
 
         			PolicyDetails policyCustomers = policyService.updatePolicy(agentId, cutomerId, policyId, policyDetails);
                     return ResponseEntity.ok(policyCustomers);
+        } catch (MessagingException e) {
+            return ResponseEntity.status(500).body("Failed to Create Customer");
+        }
+    }
+    
+    @GetMapping
+    public ResponseEntity<?> getAllPolicyDetails(@PathVariable String agentId) {
+    	try {
+    		List<PolicyDetails> policyCustomers = policyService.getAllPolicies(agentId);
+            return ResponseEntity.ok(policyCustomers);
+
+        			
         } catch (MessagingException e) {
             return ResponseEntity.status(500).body("Failed to Create Customer");
         }
