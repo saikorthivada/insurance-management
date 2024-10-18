@@ -25,6 +25,7 @@ public class RegistrationController {
     @PostMapping
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
         try {
+        	user.setStatus(0);
             User registeredUser = userService.registerUser(user);
             return ResponseEntity.ok(registeredUser);
         } catch (MessagingException e) {
@@ -73,4 +74,10 @@ public class RegistrationController {
    	 	Optional<User> userDetails = userService.login(loginDetails.getEmail(), loginDetails.getPassword());
 		 return ResponseEntity.ok(userDetails);
    }
+    
+    @PutMapping("/{id}/{status}")
+    public ResponseEntity<?> updateUserStatus(@PathVariable UUID id,@PathVariable int status) {
+    	 User userDetails = userService.updateUserStatus(id, status);
+		 return ResponseEntity.ok(userDetails);
+    }
 }

@@ -36,6 +36,9 @@ public class User {
     @NotBlank(message = "Address is required")
     private String address;
     
+    
+    private int status;
+    
     @NotBlank(message = "Password is required")
     @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}", message = "Invalid Password")
     private String password;
@@ -93,6 +96,14 @@ public class User {
     
     public UUID getId() {
     	return this.id;
+    }
+    
+    public void setStatus(int statusInput) {
+    	this.status = statusInput;
+    }
+    
+    public int getStatus() {
+    	return this.status;
     }
 
 }

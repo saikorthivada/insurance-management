@@ -84,5 +84,22 @@ public class UserService {
     	}
     	throw new UserAlreadyExistsException("User does not exist: " + email);
     }
+    
+    public User updateUserStatus(UUID id, int status) {
+        // Find the user by id
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+
+            // Update the fields (based on the provided input)
+            existingUser.setStatus(status);
+
+            // Save the updated user details back to the database
+            return userRepository.save(existingUser);
+        } else {
+            throw new UserAlreadyExistsException("User not found with id: " + id);
+        }
+    }
 }
 
